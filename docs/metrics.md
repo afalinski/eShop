@@ -72,3 +72,31 @@ Rules:
 Clear AI stance · healthy data ecosystem · AI access to internal data/docs · strong version control · small batches · user-centric focus · quality internal platform.
 
 In this demo repo, `main` + the local Kubernetes deployment play the role of production.
+
+## Stage 1 — discovery (2026-11-12, commit d9aa12b)
+
+Run of `/explore-system` (ADR-002): 8 service explorers in parallel → 2 theme explorers in parallel → architect → critic.
+
+| Metric | Value |
+|---|---|
+| Wall-clock time | 10:45:40Z → 11:01:59Z (~17 min), orchestrator start to critic finish |
+| Claims written | 356 checked: 254 in service cards, 99 in theme cards (EVT 60, SEC 39), 3 new architect claims (ARCH) |
+| Critic: confirmed | 347 |
+| Critic: not confirmed | 3 (WHK-37, IDN-21, WEB-28) |
+| Critic: wrong | 6 (ORD-05, EVT-38, EVT-59, WHK-29, SEC-18, IDN-22) |
+| Rejection rate | 9 / 356 = **2.5 %** |
+| Overview target steps with flawed reasoning (not counted in the rate) | 3 major (steps 2b, 3, 10), plus 3 smaller ones |
+
+Per-claim rejection rate measures card accuracy only. The architect's serious errors were wrong inferences from true claims. The claim count does not capture them, so track them separately.
+
+### Tokens and time per role (subagent totals as reported by the harness)
+
+| Role | Calls | Tokens | Tool uses | Duration (longest call) |
+|---|---|---|---|---|
+| Explorer — services (sonnet) | 8 | 241,023 | 162 | 49 s |
+| Explorer — themes (sonnet) | 2 | 131,143 | 66 | 103 s |
+| Architect (opus) | 1 | 89,844 | 14 | 289 s |
+| Critic (sonnet) | 1 | 266,280 | 160 | 486 s |
+| **Total subagents** | 12 | **728,290** | 402 | — |
+
+Orchestrator tokens: not available from inside the session. The critic is the most expensive role (37 % of tokens) and the critical path (~8 of ~17 min).
