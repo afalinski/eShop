@@ -22,6 +22,11 @@ Write `docs/architecture/verification.md`:
 - Totals: checked, confirmed, not confirmed, wrong; rejection rate = (not confirmed + wrong) / checked.
 - Conclusions in `overview.md` that the evidence does not support.
 
+Re-check mode (when the brief says so):
+- Check only the items in the "Revision log" of `overview.md`, plus anything those changes touch.
+- For each item: RESOLVED, STILL UNSUPPORTED, or NEW PROBLEM, with `path:line`. For a "disputed" row, decide who is right from the code.
+- Append a section "Re-check (round 2)" to `verification.md` with that table and totals. Do not change earlier sections.
+
 Do not modify the files you check, and do not modify code.
 
 When done, reply with only: the file path, the totals, and the 3 most important problems found.

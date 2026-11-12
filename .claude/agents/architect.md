@@ -21,4 +21,9 @@ Rules:
 - Prefer a few strong findings over many weak ones.
 - Do not modify code.
 
-When done, reply with only: the file path, the number of weak spots, and a 3-line summary.
+Revision mode (when the brief says so):
+- Read `docs/architecture/verification.md` first. Treat every critic finding as a defect to fix or to dispute with new `path:line` evidence.
+- Edit `overview.md` in place. Do not rewrite sections that have no finding.
+- Add a section "Revision log" at the end: one row per change — finding, what changed, sections touched, evidence. If you disagree with a finding, add a row with "disputed" and your evidence.
+
+When done, reply with only: the file path, the number of weak spots (or, in revision mode, changes made and findings disputed), and a 3-line summary.

@@ -1,6 +1,7 @@
 ---
 name: explore-system
 description: Run the discovery agent team on this repository — parallel explorers per bounded context, cross-cutting theme pass, architect, critic — and record metrics. Use when asked to explore, map or review the architecture of the system.
+model: sonnet
 disable-model-invocation: true
 ---
 
@@ -43,6 +44,9 @@ One `architect` call with the list of all card files.
 
 ## 5. Critic
 One `critic` call with all card files and `overview.md`. Do not pass the architect's reply or any reasoning — only file paths.
+
+## 5b. Revision round
+Run the `revise-architecture` skill once. It is the only revision round (iteration cap = 1); anything still unsupported after it goes to a human.
 
 ## 6. Record
 - Append to `docs/metrics.md` (section "Stage 1 — discovery"): wall-clock time, number of claims, critic totals and rejection rate, and token usage per role if available.
