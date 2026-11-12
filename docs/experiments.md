@@ -34,3 +34,10 @@ Format: **Hypothesis → What I did → Result (numbers) → Conclusion / next s
 - Result: plan soundness 23 % → 77 %. 27 of 30 rows fixed; 3 new problems found, 1 of them in text the first critic pass had confirmed.
 - Lesson: the verifier is fallible too. Round 2 showed that round 1 overstated the CVV logging issue: with the default logger, `{@Command}` prints the type name; only the `CreateOrderRequest` record logged on the all-zero request-ID branch writes card number and CVV in clear.
 - Conclusion: one round gives most of the value; the rest goes to a human. Iteration cap stays at 1.
+
+## E4. Is the repo safe to auto-format? (2026-11-12)
+- Hypothesis: a `PostToolUse` hook that runs `dotnet format` after every edit is safe, because the code base is format-clean.
+- What I did: `dotnet format eShop.Web.slnf --verify-no-changes` on the unmodified tree, then again with `--include` on single files.
+- Result: 215 violations already exist; the visible ones in the sample are import-order errors in test files. `--include` limits the check to one file, but even `src/Ordering.API/Apis/OrdersApi.cs` has 2 old violations.
+- Conclusion: the hypothesis is wrong. An auto-format hook would add unrelated changes to every file the agent touches and inflate every PR. The hook is dropped. `CLAUDE.md` tells agents to match the style only in the lines they write and to check one file with `--verify-no-changes --include`.
+- Also found while checking the commands for `CLAUDE.md`: with Microsoft.Testing.Platform the filter option depends on the test framework. The MSTest unit projects take `--filter "Name~<test>"` and reject `--filter-method` ("Unknown option"). The xUnit v3 functional projects take `--filter-method "*<test>*"` and silently run nothing with `--filter` ("Zero tests ran"). The first check covered only an MSTest project; the A0/B/C measurement (E8) exposed the xUnit half. Without this line an agent loses runs guessing.
