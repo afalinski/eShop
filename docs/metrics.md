@@ -1,0 +1,74 @@
+# Metrics
+
+Baseline measured before any AI tooling was added. Every later stage appends a column or a section.
+
+## Stage 0 — baseline (2026-11-12, commit 913acea)
+
+| Metric | Value |
+|---|---|
+| Projects (.csproj) | 28 |
+| C# in `src` | 498 files, ~22.7K lines (+40 Razor files) |
+| C# in `tests` | 49 files, ~3.6K lines |
+| Automated tests | 125 (unit + functional), all passing |
+| E2E (Playwright) scenarios | 3 (browse, cart, checkout) |
+| Build, incremental | ~11 s |
+| Full test run | ~2 min (functional tests use Docker containers) |
+| Code coverage | not measured yet |
+| Manual task time (one small task, no AI) | **~2–2.5 h — expert estimate, not measured** (see below) |
+
+### Reference task: price-range filter in Catalog.API (`minPrice` / `maxPrice` + functional test)
+
+Estimate for an experienced .NET developer seeing this repo for the first time, working at a calm pace:
+
+| Step | Time |
+|---|---|
+| Orientation: find the endpoint (`GetAllItems` v2 in `CatalogApi.cs`), filtering pattern, test fixture | 30–40 min |
+| Implementation: query parameters, filter, validation (`minPrice <= maxPrice`, non-negative) | 30 min |
+| Functional test (Testcontainers fixture, ~2 min per run, 2–3 runs) | 40 min |
+| Update checked-in OpenAPI docs (`Catalog.API_v2.json`), self-review, PR description | 20–30 min |
+| **Total** | **~2–2.5 h** |
+
+Caveat: an estimate is weaker evidence than a measurement. When comparing agent runs against it, say so explicitly.
+
+## Metric definitions (reference approach)
+
+Based on DORA (current set of five software delivery metrics) plus AI-specific metrics.
+Principle: metrics are collected **automatically from systems** (CI/CD, Git, issue tracker), never from manual reports; failure is **defined before** measuring; we look at **trends**, not single numbers.
+
+### Throughput
+| Metric | Definition | Source |
+|---|---|---|
+| Change lead time | First commit → change running in production | Git + deployment events |
+| Deployment frequency | Production deployments per day/week | CI/CD |
+| Failed deployment recovery time (former MTTR) | Failed deployment detected → service restored | Incident/alert tool + CI/CD |
+
+### Instability
+| Metric | Definition | Source |
+|---|---|---|
+| Change failure rate | Deployments that needed immediate intervention (rollback, hotfix, feature flag turned off, incident) ÷ all deployments | Deployment events linked to incidents/hotfixes by version / commit SHA |
+| Deployment rework rate | Unplanned deployments made to fix a user-facing bug ÷ all deployments | CI/CD + issue type |
+
+Context (DORA 2025, State of AI-assisted Software Development): AI adoption is now **positively** related to throughput but **still negatively** related to stability. AI is an **amplifier** of the existing system — this is why stability metrics and cohort comparison are mandatory.
+
+### AI-specific (aligned with Anthropic's Claude Code analytics)
+| Metric | Definition | Source |
+|---|---|---|
+| PRs with Claude Code (%) | Merged PRs containing at least one line written with Claude Code ÷ all merged PRs | PR label `claude-code-assisted` (same label Anthropic's contribution metrics use) |
+| PRs per engineer per day | Merged PRs ÷ active engineers — the headline measure Anthropic reported internally | GitHub |
+| Cohort comparison | All DORA metrics split into `claude-code-assisted` vs. other PRs, within the same task type | GitHub labels + deployment/incident data |
+| Suggestion accept rate | Accepted Edit/Write decisions ÷ all decisions | Claude Code OpenTelemetry: `claude_code.code_edit_tool.decision` |
+| Cost and tokens | USD and tokens per session / per merged PR | OTel: `claude_code.cost.usage`, `claude_code.token.usage` |
+| Active time | Human keyboard time + agent processing time | OTel: `claude_code.active_time.total` |
+| Autonomy | Tool calls per human turn — how long the agent works without a person | OTel events (`tool_result`, `user_prompt`) |
+| Human review time | Time a human spends reviewing / correcting an agent PR | PR review events |
+| Agent iterations | Review ↔ implement loops before the PR was ready | Pipeline logs |
+
+Rules:
+- Activity metrics (lines of code, commits, PR count) are **proxies, not productivity** — always read them together with DORA stability metrics.
+- **Triangulate**: system data + a short developer survey (perceived productivity, review burden, trust). Anthropic's own study combined a survey, interviews and transcript analysis; self-reported +50% matched a measured +67% merged PRs per engineer.
+- Telemetry is opt-in (`CLAUDE_CODE_ENABLE_TELEMETRY=1`, OTLP exporter); prompts and code are redacted by default.
+
+### Conditions that make AI pay off (DORA AI Capabilities Model, 2025)
+Clear AI stance · healthy data ecosystem · AI access to internal data/docs · strong version control · small batches · user-centric focus · quality internal platform.
+
+In this demo repo, `main` + the local Kubernetes deployment play the role of production.
