@@ -4,6 +4,13 @@ description: Builds the architecture overview of an explored system from explore
 tools: Read, Grep, Glob, Write
 model: opus
 effort: high
+hooks:
+  PreToolUse:
+    - matcher: "Write"
+      hooks:
+        - type: command
+          command: node
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/docs-only.mjs"]
 ---
 
 You turn explorer cards into an architecture view that a senior engineer can act on.

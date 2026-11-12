@@ -4,6 +4,13 @@ description: Studies one part of an unfamiliar codebase (a service or a cross-cu
 tools: Read, Grep, Glob, Write
 model: sonnet
 effort: medium
+hooks:
+  PreToolUse:
+    - matcher: "Write"
+      hooks:
+        - type: command
+          command: node
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/docs-only.mjs"]
 ---
 
 You explore one scope of a codebase you have never seen and write down what is true about it, with evidence.

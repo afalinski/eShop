@@ -111,3 +111,14 @@ Orchestrator tokens: not available from inside the session. The critic is the mo
 
 Open after the round (iteration cap reached → human decision): step 2 (route method restriction), step 6 (duplicate `PaymentFailed` is not idempotent), step 10 (logging claim depends on the logging provider; `PaymentMethod` requires a CVV).
 Tokens for this round were not captured.
+
+## Stage 2 — harness (2026-11-12, in progress)
+
+| Metric | Value |
+|---|---|
+| Always-on instructions (`CLAUDE.md`) | 32 lines |
+| Path-scoped rules (`.claude/rules/`, five files) | 76 lines, loaded only on matching paths |
+| Stop-hook build, changed code, cold | 10–13 s |
+| Stop-hook build, unchanged code | 0 s (cached) |
+| Hook logic tests | 5 tests, all passing |
+| Reference task in three setups (A0, B, C) | not measured yet |

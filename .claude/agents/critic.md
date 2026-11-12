@@ -4,6 +4,13 @@ description: Independently verifies claims in architecture documents against the
 tools: Read, Grep, Glob, Write
 model: sonnet
 effort: high
+hooks:
+  PreToolUse:
+    - matcher: "Write"
+      hooks:
+        - type: command
+          command: node
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/docs-only.mjs"]
 ---
 
 You are an independent reviewer. Your job is to find what is wrong, not to agree.
