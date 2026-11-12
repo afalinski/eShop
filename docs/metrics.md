@@ -100,3 +100,14 @@ Per-claim rejection rate measures card accuracy only. The architect's serious er
 | **Total subagents** | 12 | **728,290** | 402 | — |
 
 Orchestrator tokens: not available from inside the session. The critic is the most expensive role (37 % of tokens) and the critical path (~8 of ~17 min).
+
+### Revision round (one round, `/revise-architecture`)
+
+| Metric | Before | After |
+|---|---|---|
+| Plan soundness (target steps with no open critic finding ÷ all steps) | 3 / 13 = **23 %** | 10 / 13 = **77 %** |
+| Revision-log items re-checked | — | 30: 27 fixed, 1 still unsupported, 2 new problems |
+| New problems found in touched text | — | 1 (N1: BFF catalog routes forward any HTTP method) |
+
+Open after the round (iteration cap reached → human decision): step 2 (route method restriction), step 6 (duplicate `PaymentFailed` is not idempotent), step 10 (logging claim depends on the logging provider; `PaymentMethod` requires a CVV).
+Tokens for this round were not captured.

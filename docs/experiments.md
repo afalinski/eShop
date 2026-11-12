@@ -27,3 +27,10 @@ Format: **Hypothesis → What I did → Result (numbers) → Conclusion / next s
   - Step 10 says the readers of the card claims are unknown and misses card data being logged: MAUI reads the claims, and Ordering logs the CVV.
 - Conclusion: the hypothesis holds for card accuracy. But a low claim rejection rate does not mean the recommendations are sound: the architect's errors were wrong inferences from true facts. The critic is therefore essential, and it is also the slowest and most expensive role.
 - Next step: give the overview a second pass that fixes steps 2b, 3 and 10 from `verification.md`. Add a "plan soundness" metric next to the claim rejection rate. Consider splitting the critic into parallel slices to shorten the critical path.
+
+## E2b. One revision round (2026-11-12)
+- Hypothesis: one architect → critic round fixes most unsupported conclusions without a second round.
+- What I did: `/revise-architecture`. The architect fixed the overview and wrote a revision log (30 rows, none disputed). The critic re-checked only the log rows and the text they touched.
+- Result: plan soundness 23 % → 77 %. 27 of 30 rows fixed; 3 new problems found, 1 of them in text the first critic pass had confirmed.
+- Lesson: the verifier is fallible too. Round 2 showed that round 1 overstated the CVV logging issue: with the default logger, `{@Command}` prints the type name; only the `CreateOrderRequest` record logged on the all-zero request-ID branch writes card number and CVV in clear.
+- Conclusion: one round gives most of the value; the rest goes to a human. Iteration cap stays at 1.
