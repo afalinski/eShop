@@ -10,7 +10,12 @@
       "Read(**/*.pfx)",
       "Edit(**/.env)",
       "Edit(**/.env.local)",
-      "Edit(**/*.pfx)"
+      "Edit(**/*.pfx)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "PowerShell(Invoke-WebRequest *)",
+      "PowerShell(Invoke-RestMethod *)",
+      "PowerShell(Start-BitsTransfer *)"
     ]
   },
   "hooks": {

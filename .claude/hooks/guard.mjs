@@ -25,6 +25,20 @@ const rules = [
     re: /\bdotnet\s+ef\s+database\s+drop\b/i,
     why: "dropping a database",
   },
+  {
+    // Defense in depth behind the Read/Edit deny rules in settings.json. Those cover cat, head,
+    // sed and redirections, but not a script that opens the file itself (node -e, python -c).
+    // Matches .env and .env.local as a path segment; .env.example does not match.
+    re: /(^|[\s'"=@<>:/\\(])\.env(\.local)?(?=$|[\s'"`\\;|&)<>,])|\.pfx\b/i,
+    why: "the command names a secret file (.env, .env.local or .pfx)",
+  },
+  {
+    // Behind the deny rules for curl, wget and the PowerShell web cmdlets. A deny rule does not
+    // match the program called by path or inside sh -c; this matches the name anywhere in the text.
+    // It cannot see a script that opens a socket itself: only an OS sandbox stops that (ADR-006).
+    re: /(^|[^\w.-])(curl|wget|invoke-webrequest|invoke-restmethod|iwr|irm|start-bitstransfer)(\.exe)?(?=$|[^\w-])/i,
+    why: "network tools are not allowed in agent sessions (an injected instruction could use them to send data out)",
+  },
 ];
 
 for (const rule of rules) {
