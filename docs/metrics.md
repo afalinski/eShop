@@ -116,11 +116,32 @@ Tokens for this round were not captured.
 
 | Metric | Value |
 |---|---|
-| Always-on instructions (`CLAUDE.md`) | 32 lines |
+| Always-on instructions (`CLAUDE.md`) | 33 lines |
 | Path-scoped rules (`.claude/rules/`, five files) | 76 lines, loaded only on matching paths |
 | Stop-hook build, changed code, cold | 10–13 s |
 | Stop-hook build, unchanged code | 0 s (cached) |
 | Hook logic tests | 5 tests, all passing |
 | Task skills | 3 (`add-endpoint`, `add-integration-event`, `add-migration`) |
 | Skill trigger check | 4 of 4 prompts as intended (one run each) |
-| Reference task in three setups (A0, B, C) | not measured yet |
+| Reference task in three setups (A0, B, C) | measured, see below and E8 |
+
+### Reference task in three setups (2026-11-13, E8)
+
+Price-range filter in Catalog v2 with a functional test. Model Sonnet, headless, one clone per run. Correctness = build + all Catalog functional tests + a hidden acceptance test written before the runs (6 cases) + v1 contract unchanged + v2 OpenAPI updated + no files outside Catalog.
+
+| Setup | Run | Time | Cost | Turns | Correct | Ready to commit (no line-ending-only file in the diff) | 400 body |
+|---|---|---|---|---|---|---|---|
+| A0, no configuration | 1 | 141 s | $0.20 | 14 | yes | no | validation problem |
+| A0 | 2 | 104 s | $0.17 | 14 | yes | no | validation problem |
+| B, with the wrong filter command | 1 | 174 s | $0.41 | 22 | yes | yes | ProblemDetails |
+| B, filter command fixed | 2 | 188 s | $0.24 | 20 | yes | yes | validation problem |
+| B, filter command fixed | 3 | 151 s | $0.26 | 21 | yes | yes | ProblemDetails |
+| C, one 663-line `CLAUDE.md` | 1 | 184 s | $0.49 | 22 | yes | yes | plain string |
+
+| Always-on context at session start (tokens written to cache, trivial prompt) | Value |
+|---|---|
+| A0 | 9,343 |
+| B | 9,417 |
+| C | 35,160 |
+
+Against the stage 0 estimate of 2–2.5 h by hand: every run finished in under 4 minutes of agent time. Human review time is not included and was not measured. The sample is 1–3 runs per setup on one easy task, so read the differences as direction, not size.

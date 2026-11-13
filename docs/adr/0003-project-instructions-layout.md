@@ -29,7 +29,7 @@ Why:
 Why not A: it has no good place for service traps. Why not C: it goes against the current guidance and puts the whole overview in front of every task.
 
 ## Consequences
-- Always-on context is 32 lines. The five rule files add 76 lines, loaded only on matching paths.
+- Always-on context is 33 lines. The five rule files add 76 lines, loaded only on matching paths.
 - Rules go stale as the code changes. Claim IDs make an audit possible, and `/doctor prompt-audit` runs before every measurement.
 - Rules are guidance, not enforcement. Anything with zero exceptions becomes a hook in the next step.
-- Measurement (stage 2 check): one reference task in three setups, A0 (no configuration), B and C. Record time, tokens and correctness in `docs/metrics.md`.
+- Measured (E8): on the reference task all three setups were correct. B produced a diff ready to commit where A0 did not, at about 35 % more cost; the thick file (C) cost the most and gave the weakest error response. The measurement also found a wrong test command in this file. The sample is small and the task easy: the next comparison uses a task that crosses the documented traps.
