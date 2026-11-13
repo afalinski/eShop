@@ -121,4 +121,6 @@ Tokens for this round were not captured.
 | Stop-hook build, changed code, cold | 10–13 s |
 | Stop-hook build, unchanged code | 0 s (cached) |
 | Hook logic tests | 5 tests, all passing |
+| Task skills | 3 (`add-endpoint`, `add-integration-event`, `add-migration`) |
+| Skill trigger check | 4 of 4 prompts as intended (one run each) |
 | Reference task in three setups (A0, B, C) | not measured yet |
